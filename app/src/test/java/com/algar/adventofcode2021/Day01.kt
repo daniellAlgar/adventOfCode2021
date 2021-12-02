@@ -29,7 +29,7 @@ class Day01 {
 
     private fun getInput(): List<Int> {
         val output = arrayListOf<Int>()
-        val inputStream = javaClass.getResourceAsStream("day01_input1.txt")
+        val inputStream = javaClass.getResourceAsStream("day01.txt")
         val reader = BufferedReader(InputStreamReader(inputStream))
 
         var line: String?
