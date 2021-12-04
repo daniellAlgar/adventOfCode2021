@@ -9,19 +9,25 @@ typealias Boards = List<List<Int>>
 class Day04 {
 
     @Test
-    fun `task 1 - winning bingo board`() {
+    fun `task 1 & 2- winning bingo board`() {
         val (numbers, boards) = getInput()
         val boardMatches = initBoardMatches(given = boards)
+        val boardOrder = arrayListOf<Int>()
         numbers.forEach { drawnNumber ->
-            boards.forEachIndexed { boardIndex, board ->
+            boards.forEachIndexed boards@{ boardIndex, board ->
                 board.forEachIndexed { cellIndex, cellValue ->
-                    if (cellValue == drawnNumber) boardMatches[boardIndex][cellIndex] = 1
-                    else return@forEachIndexed
-                    if (bingo(boardMatches[boardIndex])) {
-                        val score =
-                            drawnNumber * sumOfUnmarkedNumbers(board, boardMatches[boardIndex])
-                        println("Score: $score")
-                        return
+                    if (cellValue == drawnNumber) {
+                        boardMatches[boardIndex][cellIndex] = 1
+                        if (bingo(boardMatches[boardIndex])) {
+                            val score =
+                                drawnNumber * sumOfUnmarkedNumbers(board, boardMatches[boardIndex])
+                            println("Score: $score")
+
+                            if (!boardOrder.contains(boardIndex)) {
+                                boardOrder.add(boardIndex)
+                                println("Board order: $boardOrder")
+                            }
+                        }
                     }
                 }
             }
