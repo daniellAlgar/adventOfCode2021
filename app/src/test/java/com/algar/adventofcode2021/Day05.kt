@@ -16,11 +16,13 @@ class Day05 {
     fun `task 1 - at least 2 overlapping lines`() {
         val input = getInput().filter { it.p1.first == it.p2.first || it.p1.second == it.p2.second }
         val hydroThermalMap = plotLines(input)
-        println(
-            "Task 1 - Number of at least 2 overlapping lines: ${
-                hydroThermalMap.flatten().count { it > 1 }
-            }"
-        )
+        println("Task 1 ${hydroThermalMap.flatten().count { it > 1 }}")
+    }
+
+    @Test
+    fun `task 2 - at least 2 overlapping lines including diagonals`() {
+        val hydroThermalMap = plotLines(getInput())
+        println("Task 2 ${hydroThermalMap.flatten().count { it > 1 }}")
     }
 
     private fun plotLines(input: List<Line>): MutableList<MutableList<Int>> {
@@ -28,12 +30,14 @@ class Day05 {
         input.forEach { line ->
             hydroThermalMap.forEachIndexed { yIndex, list ->
                 list.forEachIndexed { xIndex, _ ->
-                    val c = Pair(xIndex, yIndex)
-                    if (distance(p1 = line.p1, p2 = c) + distance(p1 = line.p2, p2 = c)
-                        == distance(p1 = line.p1, p2 = line.p2)
-                    ) {
+                    val pointC = Pair(xIndex, yIndex)
+                    val distAC = distance(p1 = line.p1, p2 = pointC)
+                    val distBC = distance(p1 = line.p2, p2 = pointC)
+                    val distanceAB = distance(p1 = line.p1, p2 = line.p2)
+                    val totalCDist = distAC + distBC
+                    val delta = 0.0001
+                    if (totalCDist < distanceAB + delta && totalCDist > distanceAB - delta)
                         hydroThermalMap[yIndex][xIndex]++
-                    }
                 }
             }
         }
